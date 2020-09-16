@@ -1,7 +1,4 @@
-# remote desktop
-sudo apt-get install xrdp
-=============================
-OpenCV
+# OpenCV
 
 sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
 sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
@@ -29,24 +26,3 @@ mkvirtualenv cvp3 -p python3
 pip install -v opencv-contrib-python==4.1.0.25
 pip install imutils
 pip install "picamera[array]"
-
-========================
-GStreamer
-http://lifestyletransfer.com/how-to-install-gstreamer-python-bindings/
-
----python binding
-apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-pulseaudio
-sudo apt-get install python3-gi python-gst-1.0
-sudo apt-get install libgirepository1.0-dev
-sudo apt-get install libcairo2-dev gir1.2-gstreamer-1.0
-
-
------rpicamsrc
-sudo apt-get install autoconf automake libtool pkg-config libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libraspberrypi-dev
-git clone https://github.com/thaytan/gst-rpicamsrc.git
-cd gst-rpicamsrc
-./autogen.sh --prefix=/usr --libdir=/usr/lib/arm-linux-gnueabihf/
-make
-sudo make install
-
-
