@@ -1,28 +1,57 @@
-# OpenCV
+#!/bin/bash -i
+# Install OpenCV using pip
+echo "Installing dependencies..."
+packages=("libhdf5-dev libhdf5-103 libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev")
+for pkg in ${packages[@]}; do
 
-sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
-sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
-sudo apt-get install libatlas-base-dev
-sudo apt-get install libjasper-dev
+    is_pkg_installed=$(dpkg-query -W --showformat='${Status}\n' ${pkg} | grep "install ok installed")
 
-
-# install opencv using pip (I did it for python3, python2 didnt worked)
-https://www.pyimagesearch.com/2018/09/19/pip-install-opencv/
-https://stackoverflow.com/questions/31133050/virtualenv-command-not-found
-https://stackoverflow.com/questions/60252119/error-environment-users-myuser-virtualenvs-iron-does-not-contain-activation-s
-https://raspberrypi.stackexchange.com/questions/108740/error-environment-home-pi-virtualenvs-cv-does-not-contain-an-activate-scrip
-
-sudo pip3 install virtualenv virtualenvwrapper
-nano ~/.bashrc
-
-# virtualenv and virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-source /usr/local/bin/virtualenvwrapper.sh
-export VIRTUALENVWRAPPER_ENV_BIN_DIR=bin
-
+    if [ "${is_pkg_installed}" == "install ok installed" ]; then
+        echo ${pkg} is installed.
+    else
+        sudo apt-get install ${pkg}
+    fi
+done
+echo "Installing virtualenv and virtualenvwrapper..."
+pip_packages=("virtualenv virtualenvwrapper")
+for pkg in ${pip_packages[@]}; do
+    if ! [[ -n "$(pip3 list | grep ${pkg})" ]];then
+	echo ${pkg} is not installed, installing from pip3...
+    	sudo pip3 install ${pkg}
+    else
+	echo ${pkg} is installed.
+    fi
+done
+#sudo pip3 install virtualenv virtualenvwrapper
+echo "Configuring virtual environment..."
+echo "Changing to home directory..."
+cd ~
+if grep -Fxq "# virtualenv and virtualenvwrapper" .bashrc
+then
+    echo "Found bashrc setup"
+else
+    echo "Adding bashrc setup"
+    echo "" >> .bashrc
+    echo "# virtualenv and virtualenvwrapper" >> .bashrc
+    echo "export WORKON_HOME=$HOME/.virtualenvs" >> .bashrc
+    echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> .bashrc
+    echo "source /usr/local/bin/virtualenvwrapper.sh" >> .bashrc
+    echo "export VIRTUALENVWRAPPER_ENV_BIN_DIR=bin" >> .bashrc
+fi
+echo "Creating virtual environment to install openCV"
+source ~/.bashrc
 mkvirtualenv cvp3 -p python3
-
-pip install -v opencv-contrib-python==4.1.0.25
-pip install imutils
-pip install "picamera[array]"
+workon cvp3
+echo "Installing pip dependencies..."
+pip_packages=("imutils "picamera[array]"")
+for pkg in ${pip_packages[@]}; do
+    if ! [[ -n "$(pip list | grep ${pkg})" ]];then
+	echo ${pkg} is not installed, installing from pip...
+    	pip install ${pkg}
+    else
+	echo ${pkg} is installed.
+    fi
+done
+read -p "Do you want to install openCV (This will take a long time)? [Y/n]: " answer
+answer=${answer:Y}
+[[ $answer =~ [Yy] ]] && pip install -v opencv-contrib-python==4.1.0.25

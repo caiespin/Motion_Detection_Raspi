@@ -49,4 +49,8 @@ cd gst-rpicamsrc
 make
 sudo make install
 
+----------------VS Code
+sudo -s
+. <( wget -O - https://code.headmelted.com/installers/apt.sh )
 
+https://stackoverflow.com/questions/50612169/pylint-not-recognizing-cv2-members
